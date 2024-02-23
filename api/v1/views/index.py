@@ -1,3 +1,8 @@
+#!/usr/bin/python3
+"""
+The API routes for the RESTFUL API
+"""
+
 from api.v1.views import app_views
 from flask import jsonify
 from models import storage
