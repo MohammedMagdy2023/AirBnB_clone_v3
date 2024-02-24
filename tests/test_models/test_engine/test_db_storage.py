@@ -68,21 +68,71 @@ test_db_storage.py'])
                             "{:s} method needs a docstring".format(func[0]))
 
 
-class TestFileStorage(unittest.TestCase):
-    """Test the FileStorage class"""
+class TestDBStorage(unittest.TestCase):
+    """Test the DBStorage class"""
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_returns_dict(self):
-        """Test that all returns a dictionaty"""
-        self.assertIs(type(models.storage.all()), dict)
-
-    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
-    def test_all_no_class(self):
-        """Test that all returns all rows when no class is passed"""
+        """Test that all returns the DBStorage.__objects attr"""
+        storage = DBStorage()
+        new_dict = storage.all()
+        self.assertEqual(type(new_dict), dict)
+        self.assertIs(new_dict, storage._DBStorage__objects)
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_new(self):
-        """test that new adds an object to the database"""
+        """test that new adds an object to the DBStorage.__objects attr"""
+        storage = DBStorage()
+        save = DBStorage._DBStorage__objects
+        DBStorage._DBStorage__objects = {}
+        test_dict = {}
+        for key, value in classes.items():
+            with self.subTest(key=key, value=value):
+                instance = value()
+                instance_key = instance.__class__.__name__ + "." + instance.id
+                storage.new(instance)
+                test_dict[instance_key] = instance
+                self.assertEqual(test_dict, storage._DBStorage__objects)
+        DBStorage._DBStorage__objects = save
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
         """Test that save properly saves objects to file.json"""
+        storage = DBStorage()
+        new_dict = {}
+        for key, value in classes.items():
+            instance = value()
+            instance_key = instance.__class__.__name__ + "." + instance.id
+            new_dict[instance_key] = instance
+        save = DBStorage._DBStorage__objects
+        DBStorage._DBStorage__objects = new_dict
+        storage.save()
+        DBStorage._DBStorage__objects = save
+        for key, value in new_dict.items():
+            new_dict[key] = value.to_dict()
+        string = json.dumps(new_dict)
+        with open("file.json", "r") as f:
+            js = f.read()
+        self.assertEqual(json.loads(string), json.loads(js))
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_get(self):
+        """Test that get retrieves object properly"""
+        storage = DBStorage()
+        state = State(name="NY")
+        storage.new(state)
+        result = storage.get(State, state.id)
+        self.assertEqual(result.id, state.id)
+        self.assertIsInstance(result, State)
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_count(self):
+        """Test that count counts objects properly"""
+        storage = DBStorage()
+        old_count = storage.count()
+        old_count_state = storage.count(State)
+        storage.new(State(name="A"))
+        storage.new(State(name="C"))
+        storage.new(State(name="C"))
+        storage.new(City(name="D"))
+        self.assertEqual(old_count + 4, storage.count())
+        self.assertEqual(old_count_state + 3, storage.count(State))
