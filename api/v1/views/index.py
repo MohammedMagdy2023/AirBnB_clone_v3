@@ -21,4 +21,4 @@ def stats():
     new_dict = {}
     for key, value in classes.items():
         new_dict[value] = storage.count(key)
-    return jsonify(new_dict, 200)
+    return jsonify(new_dict)
