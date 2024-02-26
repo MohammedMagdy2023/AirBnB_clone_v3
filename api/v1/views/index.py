@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""index.py to connect to API"""
+"""API index endpoints"""
 from flask import Flask, jsonify
 from api.v1.views import app_views
 from models import storage
