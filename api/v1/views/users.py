@@ -10,7 +10,7 @@ from models.user import User
 @app_views.route("/users", methods=["GET"], strict_slashes=False)
 def get_all_users():
     """Retrieve information for all users."""
-    users = [user.to_dict() for user in storage.all("User").values()]
+    users = [user.to_dict() for user in storage.all(User).values()]
     return jsonify(users)
 
 
@@ -18,7 +18,7 @@ def get_all_users():
                  strict_slashes=False)
 def get_user(user_id):
     """Retrieve information for a specified user."""
-    user = storage.get("User", user_id)
+    user = storage.get(User, user_id)
     if user is None:
         abort(404)
     return jsonify(user.to_dict())
@@ -28,7 +28,7 @@ def get_user(user_id):
                  strict_slashes=False)
 def delete_user(user_id):
     """Delete a user based on its ID."""
-    user = storage.get("User", user_id)
+    user = storage.get(User, user_id)
     if user is None:
         abort(404)
     user.delete()
@@ -57,7 +57,7 @@ def create_user():
                  strict_slashes=False)
 def update_user(user_id):
     """Update a user."""
-    user = storage.get("User", user_id)
+    user = storage.get(User, user_id)
     if user is None:
         abort(404)
     if not request.get_json():

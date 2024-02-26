@@ -11,7 +11,7 @@ from models.amenity import Amenity
 def get_all_amenities():
     """Retrieve information for all amenities."""
     amenities = [amenity.to_dict()
-                 for amenity in storage.all("Amenity").values()]
+                 for amenity in storage.all(Amenity).values()]
     return jsonify(amenities)
 
 
@@ -19,7 +19,7 @@ def get_all_amenities():
                  strict_slashes=False)
 def get_specific_amenity(amenity_id):
     """Retrieve information for a specific amenity."""
-    amenity = storage.get("Amenity", amenity_id)
+    amenity = storage.get(Amenity, amenity_id)
     if amenity is None:
         abort(404)
     return jsonify(amenity.to_dict())
@@ -29,7 +29,7 @@ def get_specific_amenity(amenity_id):
                  strict_slashes=False)
 def delete_amenity(amenity_id):
     """Delete an amenity based on its ID."""
-    amenity = storage.get("Amenity", amenity_id)
+    amenity = storage.get(Amenity, amenity_id)
     if amenity is None:
         abort(404)
     amenity.delete()
@@ -55,7 +55,7 @@ def create_amenity():
                  strict_slashes=False)
 def update_amenity(amenity_id):
     """Update an amenity."""
-    amenity = storage.get("Amenity", amenity_id)
+    amenity = storage.get(Amenity, amenity_id)
     if amenity is None:
         abort(404)
     if not request.get_json():
