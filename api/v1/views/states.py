@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-"""states.py"""
+"""
+Define an api route for stats to get, post and delete stats from the database
+"""
 
 from api.v1.views import app_views
 from flask import abort, jsonify, make_response, request
