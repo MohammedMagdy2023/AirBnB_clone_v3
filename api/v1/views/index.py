@@ -4,26 +4,33 @@ The API routes for the RESTFUL API
 """
 
 from api.v1.views import app_views
-from flask import jsonify
+from flask import jsonify, request
 from models import storage
 
 
 @app_views.route("/status", strict_slashes=False)
 def api():
+    """
+    test the api status 
+    """
     return jsonify({"status": "OK"})
 
 
-@app_views.route("/stats", strict_slashes=False)
+@app_views.route('/stats', methods=['GET'], strict_slashes=False)
 def stats():
-    classes = {
-        "Amenity": "amenities",
-        "City": "cities",
-        "Place": "places",
-        "Review": "reviews",
-        "State": "states",
-        "User": "users"
-    }
-    new_dict = {}
-    for key, value in classes.items():
-        new_dict[value] = storage.count(key)
-    return jsonify(new_dict)
+    """
+    function to return the count of all class objects
+    """
+    if request.method == 'GET':
+        response = {}
+        classes = {
+            "Amenity": "amenities",
+            "City": "cities",
+            "Place": "places",
+            "Review": "reviews",
+            "State": "states",
+            "User": "users"
+        }
+        for key, value in classes.items():
+            response[value] = storage.count(key)
+        return jsonify(response)
