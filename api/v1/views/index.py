@@ -1,32 +1,30 @@
 #!/usr/bin/python3
-"""
-The API routes for the RESTFUL API
-"""
-
+"""index.py to connect to API"""
+from flask import Flask, jsonify
 from api.v1.views import app_views
-from flask import jsonify
 from models import storage
 
 
+classes = {
+    "amenities": "Amenity",
+    "cities": "City",
+    "places": "Place",
+    "reviews": "Review",
+    "states": "State",
+    "users": "User"
+}
+
+
 @app_views.route("/status", strict_slashes=False)
-def api():
-    """
-    test the status of the API
-    """
+def api_status():
+    """Tests the status of the API"""
     return jsonify({"status": "OK"})
 
 
 @app_views.route("/stats", strict_slashes=False)
-def stats():
-    classes = {
-        "Amenity": "amenities",
-        "City": "cities",
-        "Place": "places",
-        "Review": "reviews",
-        "State": "states",
-        "User": "users"
-    }
-    new_dict = {}
+def api_stats():
+    """Retrieves the stats of the API"""
+    results = {}
     for key, value in classes.items():
-        new_dict[value] = storage.count(key)
-    return jsonify(new_dict)
+        results[key] = storage.count(value)
+    return jsonify(results)
