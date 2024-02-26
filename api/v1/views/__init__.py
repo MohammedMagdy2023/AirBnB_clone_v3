@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 """Blueprint initialization."""
 
 from flask import Blueprint
