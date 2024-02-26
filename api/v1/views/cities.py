@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-"""API endpoints for managing cities"""
+"""API endpoints for managing cities."""
+
 from flask import abort, jsonify, make_response, request
 from api.v1.views import app_views
 from models import storage

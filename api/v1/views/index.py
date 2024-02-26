@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-"""API index endpoints"""
+"""API index endpoints."""
+
 from flask import Flask, jsonify
 from api.v1.views import app_views
 from models import storage
@@ -17,13 +18,13 @@ classes = {
 
 @app_views.route("/status", strict_slashes=False)
 def api_status():
-    """Tests the status of the API"""
+    """Tests the status of the API."""
     return jsonify({"status": "OK"})
 
 
 @app_views.route("/stats", strict_slashes=False)
 def api_stats():
-    """Retrieves the stats of the API"""
+    """Retrieves the stats of the API."""
     results = {}
     for key, value in classes.items():
         results[key] = storage.count(value)

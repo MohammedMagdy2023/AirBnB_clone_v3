@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-"""Blueprint initialization"""
+"""Blueprint initialization."""
+
 from flask import Blueprint
 
 from api.v1.views.users import *
