@@ -22,7 +22,7 @@ def stats():
         "Review": "reviews",
         "State": "states",
         "User": "users"
-}
+    }
     new_dict = {}
     for key, value in classes.items():
         new_dict[value] = storage.count(key)
